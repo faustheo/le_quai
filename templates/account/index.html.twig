@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte - Le Quai Antique{% endblock %}
+
+{% block content %}
+    <h1>Mon espace membre</h1>
+    Bienvenue {{ app.user.firstname }} dans Votre espace membre.<br>
+    C'est dans cet espace que vous allez pouvoir gérer toutes vos informations personnelles
+    <hr>
+    <a href="{{ path('app_account_password') }}">Modifier mon mot de passe</a><br>
+    -Réserver une table (Nbre de convives, allergies, date et heure prévue)<br>
+    -Sur réserver la personne sera renvoyer vers une page de formulaire, prérempli s'il à un espace membre<br>
+    -/!\ Quand le visiteur créera son compte ajouter le nombre de convive par défaut ainsi que la mentions des allergies<br>
+    -savoir si des places sont disponibles sans recharger la page<br>
+{% endblock %}
