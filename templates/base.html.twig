@@ -114,11 +114,10 @@
     </div>
     {% endif %}
 
-
     <!--Si le carousel n'est pas défini, on ajoute une marge en haut-->
     <div class="container marketing {% if block('carousel') is not defined %}mt-5{% endif %}">
     <!--Corps de la page présent dans index.html.twig-->
-        {% block content %}
+        {% block gallery %}
         {% endblock %}
 
     </div><!-- /.container -->
