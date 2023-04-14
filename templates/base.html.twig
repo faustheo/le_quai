@@ -118,6 +118,8 @@
     <div class="container marketing {% if block('carousel') is not defined %}mt-5{% endif %}">
     <!--Corps de la page présent dans index.html.twig-->
         {% block gallery %}
+        {% endblock %} 
+        {% block content %}
         {% endblock %}
 
     </div><!-- /.container -->
