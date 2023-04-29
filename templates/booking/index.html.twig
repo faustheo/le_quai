@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/le_quai.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Reservation</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form.date) }}
+    
+    {% for hour in form.hours %}
+        <div>
+            {{ form_widget(hour) }}
+            {{ form_label(hour) }}
+        </div>
+    {% endfor %}
+    
+    {{ form_end(form) }}
+    
+    {% if app.session.flashBag.has('success') %}
+        <div class="alert alert-success">
+            {{ app.session.flashBag.get('success')[0] }}
+        </div>
+    {% endif %}
+{% endblock %}

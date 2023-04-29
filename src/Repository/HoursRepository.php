@@ -39,6 +39,41 @@ class HoursRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Récupère toutes les dates disponibles
+     */
+    public function findAllDatesAndHoursAvailable(): array
+    {
+        $qb = $this->createQueryBuilder('h');
+        $qb->select('DISTINCT h.date, CONCAT(h.LunchOpening, \' - \', h.LunchClosing) AS lunch_hours, CONCAT(h.DinnerOpening, \' - \', h.DinnerClosing) AS dinner_hours')
+            ->andWhere('h.LunchOpening IS NOT NULL')
+            ->andWhere('h.LunchClosing IS NOT NULL')
+            ->andWhere('h.DinnerOpening IS NOT NULL')
+            ->andWhere('h.DinnerClosing IS NOT NULL')
+            ->orderBy('h.date', 'ASC');
+    
+        $results = $qb->getQuery()->getResult();
+    
+        $datesAndHoursAvailable = [];
+        foreach ($results as $result) {
+            $date = $result['date']->format('Y-m-d');
+            $hours = [$result['lunch_hours'], $result['dinner_hours']];
+            if (!array_key_exists($date, $datesAndHoursAvailable)) {
+                $datesAndHoursAvailable[$date] = ['hours' => $hours];
+            } else {
+                $datesAndHoursAvailable[$date]['hours'] = array_merge($datesAndHoursAvailable[$date]['hours'], $hours);
+            }
+        }
+    
+        return $datesAndHoursAvailable;
+    }
+    
+    
+    
+
+
+    
+
 //    /**
 //     * @return Hours[] Returns an array of Hours objects
 //     */

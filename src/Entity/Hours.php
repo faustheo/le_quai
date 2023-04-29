@@ -14,8 +14,8 @@ class Hours
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $name = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $LunchOpening = null;
@@ -34,14 +34,14 @@ class Hours
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->name;
+        return $this->date;
     }
 
-    public function setName(string $name): self
+    public function setDate(?\DateTimeInterface $date): self
     {
-        $this->name = $name;
+        $this->date = $date;
         return $this;
     }
 
