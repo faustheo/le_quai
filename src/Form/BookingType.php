@@ -11,14 +11,10 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use DateTime;
-use DateInterval;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Form\FormEvents;
-
+use App\Form\DataTransformer\StringToDateTimeTransformer;
 
 class BookingType extends AbstractType
 {
@@ -34,61 +30,39 @@ class BookingType extends AbstractType
         $datesAndHoursAvailable = $this->hoursRepository->findAllDatesAndHoursAvailable();
 
         $choices = [];
-        
+
         foreach ($datesAndHoursAvailable as $date => $hours) {
             $dateTime = \DateTime::createFromFormat('Y-m-d', $date);
             $dayOfWeek = $dateTime->format('D');
             $dateFormatted = $dateTime->format('d/m/Y');
             $choiceLabel = $dayOfWeek . ' : ' . $dateFormatted;
-            $choices[$dateTime->format('Y-m-d')] = $dateTime;
+            $choices[$choiceLabel] = $dateTime->format('Y-m-d');
         }
-        
+
+        $stringToDateTimeTransformer = new StringToDateTimeTransformer();
+
         $builder
-        ->add('date', ChoiceType::class, [
-            'choices' => $choices,
-            'label' => 'Choisissez une date',
-            'attr' => [
-                'class' => 'js-booking-date', // Ajouter une classe
-            ],
-            'data' => new \DateTime(), // Valeur par défaut
-            'choice_label' => function ($value, $key, $index) {
-                /** @var \DateTime $value */
-                return $value->format('D - Y-m-d');
-            },
-        ]);
-            $hours = [];
-            foreach ($datesAndHoursAvailable as $key => $values) {
-                $hoursObj = new \DateTime($key); 
-                $lunchHours = explode('-', $values['hours'][0]);
-                $dinnerHours = explode('-', $values['hours'][1]);
-                $lunchOpening = new \DateTime($lunchHours[0]);
-                $lunchClosing = new \DateTime($lunchHours[1]);
-                $dinnerOpening = new \DateTime($dinnerHours[0]);
-                $dinnerClosing = new \DateTime($dinnerHours[1]);
-                $startTime = $lunchOpening;
-                $endTime = $dinnerClosing;
-                $startTime = $lunchOpening;
-                while ($startTime < $lunchClosing) {
-                    $hours[$date][$startTime->format('H:i:s')] = $startTime->format('H:i:s');
-                    $startTime->modify('+15 minutes');
-                }
-                
-                $startTime = $dinnerOpening;
-                while ($startTime < $dinnerClosing) {
-                    $hours[$date][$startTime->format('H:i:s')] = $startTime->format('H:i:s');
-                    $startTime->modify('+15 minutes');
-                }
-                
-                
-                }
-            
-            $builder->add('hours', ChoiceType::class, [
-                'choices' => $hours,
+            ->add('date', ChoiceType::class, [
+                'choices' => $choices,
+                'label' => 'Choisissez une date',
+                'attr' => [
+                    'class' => 'js-booking-date my-custom-class', // Ajouter une classe
+                ],
+                'data' => (new \DateTime())->format('Y-m-d'), // Valeur par défaut
+            ]);
+
+        $builder
+            ->get('date')->addModelTransformer($stringToDateTimeTransformer)
+
+            ->add('hours', ChoiceType::class, [
                 'label' => 'Heure de réservation',
                 'attr' => [
                     'class' => 'js-booking-hours', // Ajouter une classe
                 ],
-            ])          
+                'choices' => [] // Laisser vide pour que le JavaScript remplisse les options
+
+
+            ])
             ->add('guests', IntegerType::class, [
                 'label' => 'Le nombre de convives',
                 'attr' => [
@@ -105,9 +79,9 @@ class BookingType extends AbstractType
                     'Oeufs' => 'Oeufs',
                     'Fruits de mer' => 'Fruits de mer',
                     'Celeri' => 'Celeri',
-                    'Sésame' => 'Sésame',
+                    'Sesame' => 'Sesame',
                     'Arachide' => 'Arachide',
-                    'Fruits à coque' => 'Fruits à coque',
+                    'Fruits a coque' => 'Fruits a coque',
                     'Moutarde' => 'Moutarde',
                     'Soja' => 'Soja',
                     'Lupin' => 'Lupin',
@@ -123,7 +97,6 @@ class BookingType extends AbstractType
                 'label' => "Réserver"
             ]);
     }
-
 
     public function configureOptions(OptionsResolver $resolver): void
     {

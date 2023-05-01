@@ -51,9 +51,9 @@ class HoursRepository extends ServiceEntityRepository
             ->andWhere('h.DinnerOpening IS NOT NULL')
             ->andWhere('h.DinnerClosing IS NOT NULL')
             ->orderBy('h.date', 'ASC');
-    
+
         $results = $qb->getQuery()->getResult();
-    
+
         $datesAndHoursAvailable = [];
         foreach ($results as $result) {
             $date = $result['date']->format('Y-m-d');
@@ -64,38 +64,51 @@ class HoursRepository extends ServiceEntityRepository
                 $datesAndHoursAvailable[$date]['hours'] = array_merge($datesAndHoursAvailable[$date]['hours'], $hours);
             }
         }
-    
+
         return $datesAndHoursAvailable;
     }
-    
-    
-    
+
+    /**
+     * Récupère les heures d'ouverture et de fermeture pour une date spécifique
+     */
+    public function findOpeningAndClosingHoursForDate(\DateTimeInterface $date): ?array
+    {
+        $qb = $this->createQueryBuilder('h');
+        $qb->select('h.LunchOpening', 'h.LunchClosing', 'h.DinnerOpening', 'h.DinnerClosing')
+            ->andWhere('h.date = :date')
+            ->setParameter('date', $date, \Doctrine\DBAL\Types\Types::DATE_IMMUTABLE)
+            ->setMaxResults(1);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result;
+    }
 
 
-    
 
-//    /**
-//     * @return Hours[] Returns an array of Hours objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('h')
-//            ->andWhere('h.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('h.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Hours
-//    {
-//        return $this->createQueryBuilder('h')
-//            ->andWhere('h.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Hours[] Returns an array of Hours objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('h')
+    //            ->andWhere('h.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('h.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Hours
+    //    {
+    //        return $this->createQueryBuilder('h')
+    //            ->andWhere('h.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

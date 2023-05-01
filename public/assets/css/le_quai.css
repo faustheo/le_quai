@@ -1,5 +1,6 @@
-.navbar-item-custom,.navbar-item-custom a{
-    color:#fff ;
+.navbar-item-custom,
+.navbar-item-custom a {
+    color: #fff;
 }
 
 .footer-custom {
@@ -7,6 +8,6 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: #dfeaff;
+    background-color: #5bd82d;
     padding-top: 25px;
 }
