@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/le_quai.css') }}" type="text/css" />
+{% endblock %}
+
+{% block title %}Carte{% endblock %}
+
+{% block content %}
+    <h1>Nos différents plats</h1>
+    <div class="row meal-container">
+        {% for meal in meals %}
+        <div class="col-md-4">
+            <a href="{{ path('app_meal', { 'slug' : meal.slug}) }}"><img src="{{ asset('uploads/meal/' ~ meal.illustration) }}" alt="{{ meal.name }}" class="img-fluid"></a>
+            <div class="meal-item text-center">
+                <h5>{{ meal.name}}</h5>
+                <span class="meal-price">{{meal.price / 100 |number_format()}} €</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

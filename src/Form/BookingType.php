@@ -2,19 +2,20 @@
 
 namespace App\Form;
 
+use DateTime;
 use App\Entity\Booking;
 use App\Repository\HoursRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use DateTime;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use App\Form\DataTransformer\StringToDateTimeTransformer;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class BookingType extends AbstractType
 {
@@ -24,6 +25,31 @@ class BookingType extends AbstractType
     {
         $this->hoursRepository = $hoursRepository;
     }
+    private function generateTimeSlots(array $openingAndClosingHours): array
+    {
+        $lunchOpening = new \DateTimeImmutable($openingAndClosingHours['LunchOpening']);
+        $lunchClosing = new \DateTimeImmutable($openingAndClosingHours['LunchClosing']);
+        $dinnerOpening = new \DateTimeImmutable($openingAndClosingHours['DinnerOpening']);
+        $dinnerClosing = new \DateTimeImmutable($openingAndClosingHours['DinnerClosing']);
+
+
+
+
+        $timeSlots = [];
+
+        // Pour le déjeuner
+        for ($time = clone $lunchOpening; $time < $lunchClosing; $time->modify('+30 minutes')) {
+            $timeSlots[$time->format('H:i')] = $time->format('H:i');
+        }
+
+        // Pour le dîner
+        for ($time = clone $dinnerOpening; $time < $dinnerClosing; $time->modify('+30 minutes')) {
+            $timeSlots[$time->format('H:i')] = $time->format('H:i');
+        }
+
+        return $timeSlots;
+    }
+
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -46,23 +72,53 @@ class BookingType extends AbstractType
                 'choices' => $choices,
                 'label' => 'Choisissez une date',
                 'attr' => [
-                    'class' => 'js-booking-date my-custom-class', // Ajouter une classe
+                    'class' => 'js-booking-date my-custom-class',
                 ],
                 'data' => (new \DateTime())->format('Y-m-d'), // Valeur par défaut
+                'choice_label' => function ($choiceValue, $key, $value) {
+                    $dateTime = \DateTime::createFromFormat('Y-m-d', $choiceValue);
+                    return $dateTime->format('D - d-m-Y');
+                },
+                'mapped' => false,
             ]);
+        $builder
+
+            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+                $form = $event->getForm();
+                $booking = $event->getData();
+
+                // Récupére la valeur du champ "date" et la convertir en objet DateTime
+                $dateString = $form->get('date')->getData();
+                $date = \DateTime::createFromFormat('Y-m-d', $dateString);
+
+                // Défini la propriété "date" de l'entité Booking avec l'objet DateTime
+                $booking->setDate($date);
+            });
+
+        // Récupérer les horaires d'ouverture et de fermeture pour la date actuelle
+        $today = new \DateTimeImmutable();
+        $openingAndClosingHours = $this->hoursRepository->findOpeningAndClosingHoursForDate($today);
+
+        // Générer les tranches horaires en fonction des horaires d'ouverture et de fermeture
+        $timeSlots = $this->generateTimeSlots($openingAndClosingHours);
 
         $builder
-            ->get('date')->addModelTransformer($stringToDateTimeTransformer)
-
             ->add('hours', ChoiceType::class, [
                 'label' => 'Heure de réservation',
                 'attr' => [
-                    'class' => 'js-booking-hours', // Ajouter une classe
+                    'class' => 'js-booking-hours',
                 ],
-                'choices' => [] // Laisser vide pour que le JavaScript remplisse les options
-
-
+                'choices' => $timeSlots,
+                // ...
             ])
+            ->add('selectedDate', HiddenType::class, [
+                'data' => $today->format('Y-m-d'),
+                'mapped' => false,
+            ]);
+
+
+
+        $builder
             ->add('guests', IntegerType::class, [
                 'label' => 'Le nombre de convives',
                 'attr' => [

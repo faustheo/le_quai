@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Hours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @extends ServiceEntityRepository<Hours>
@@ -82,6 +83,33 @@ class HoursRepository extends ServiceEntityRepository
         $result = $qb->getQuery()->getOneOrNullResult();
 
         return $result;
+    }
+    public function findHoursForDate(\DateTimeInterface $date): array
+    {
+        $hours = []; // Ici, vous devez récupérer les heures disponibles pour la date donnée à partir de la base de données
+
+        return $hours;
+    }
+
+    public function findLastDatesAndHours(int $nbDays): array
+    {
+        $startDate = new \DateTimeImmutable();
+        $endDate = $startDate->modify(sprintf('+%d days', $nbDays));
+
+        $qb = $this->createQueryBuilder('h');
+        $qb->select('h.date', 'h.LunchOpening', 'h.LunchClosing', 'h.DinnerOpening', 'h.DinnerClosing')
+            ->andWhere('h.date BETWEEN :start_date AND :end_date')
+            ->andWhere('h.LunchOpening IS NOT NULL')
+            ->andWhere('h.LunchClosing IS NOT NULL')
+            ->andWhere('h.DinnerOpening IS NOT NULL')
+            ->andWhere('h.DinnerClosing IS NOT NULL')
+            ->setParameter('start_date', $startDate)
+            ->setParameter('end_date', $endDate)
+            ->orderBy('h.date', 'ASC');
+
+        $results = $qb->getQuery()->getResult();
+
+        return $results;
     }
 
 

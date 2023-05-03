@@ -1,13 +1,39 @@
+body {
+    position: relative;
+}
+
+.navbar-custom {
+    background-color: #BA0F30;
+}
+
+.navbar-custom .nav-link {
+    color: #fff;
+}
+
 .navbar-item-custom,
 .navbar-item-custom a {
     color: #fff;
 }
 
+.meal-container {
+    margin-bottom: 150px;
+}
+
+.meal-item .meal-price {
+    font-weight: bold;
+}
+
+.table-small {
+    width: 50%;
+    font-size: 14px;
+}
+
 .footer-custom {
-    text-align: center;
-    position: fixed;
+    /*text-align: center;*/
+    position: absolute;
     bottom: 0;
+    color: #fff;
     width: 100%;
-    background-color: #5bd82d;
+    background-color: #BA0F30;
     padding-top: 25px;
 }
