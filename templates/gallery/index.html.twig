@@ -5,7 +5,7 @@
         <div class="row justify-content-evenly">
             {% for image in lastImages %}
                 <div class=" col-sm-12 col-lg-4"> 
-                    <img src="{{ asset('uploads/' ~ image.getImage()) }}" class="img-fluid" alt="{{ image.getTitle() }}" />
+                    <img src="{{ asset('uploads/' ~ image.getImage()) }}" class="rounded mx-auto d-block img-fluid" alt="{{ image.getTitle() }}" />
                 </div>
             {% endfor %}
         </div>

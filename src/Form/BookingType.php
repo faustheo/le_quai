@@ -5,6 +5,8 @@ namespace App\Form;
 use DateTime;
 use App\Entity\Booking;
 use App\Repository\HoursRepository;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Choice;
@@ -12,10 +14,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use App\Form\DataTransformer\StringToDateTimeTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 class BookingType extends AbstractType
 {
@@ -27,13 +30,10 @@ class BookingType extends AbstractType
     }
     private function generateTimeSlots(array $openingAndClosingHours): array
     {
-        $lunchOpening = new \DateTimeImmutable($openingAndClosingHours['LunchOpening']);
-        $lunchClosing = new \DateTimeImmutable($openingAndClosingHours['LunchClosing']);
-        $dinnerOpening = new \DateTimeImmutable($openingAndClosingHours['DinnerOpening']);
-        $dinnerClosing = new \DateTimeImmutable($openingAndClosingHours['DinnerClosing']);
-
-
-
+        $lunchOpening = $openingAndClosingHours['LunchOpening'];
+        $lunchClosing = $openingAndClosingHours['LunchClosing'];
+        $dinnerOpening = $openingAndClosingHours['DinnerOpening'];
+        $dinnerClosing = $openingAndClosingHours['DinnerClosing'];
 
         $timeSlots = [];
 
@@ -82,18 +82,19 @@ class BookingType extends AbstractType
                 'mapped' => false,
             ]);
         $builder
-
-            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
                 $form = $event->getForm();
-                $booking = $event->getData();
+                $bookingData = $event->getData();
 
                 // Récupére la valeur du champ "date" et la convertir en objet DateTime
-                $dateString = $form->get('date')->getData();
+                $dateString = $bookingData['date'];
                 $date = \DateTime::createFromFormat('Y-m-d', $dateString);
 
                 // Défini la propriété "date" de l'entité Booking avec l'objet DateTime
+                $booking = $form->getData();
                 $booking->setDate($date);
             });
+
 
         // Récupérer les horaires d'ouverture et de fermeture pour la date actuelle
         $today = new \DateTimeImmutable();
@@ -109,6 +110,12 @@ class BookingType extends AbstractType
                     'class' => 'js-booking-hours',
                 ],
                 'choices' => $timeSlots,
+                'constraints' => [
+                    new Assert\Choice([
+                        'choices' => array_keys($timeSlots),
+                        'message' => 'Veuillez sélectionner une heure de réservation valide.',
+                    ]),
+                ],
                 // ...
             ])
             ->add('selectedDate', HiddenType::class, [
