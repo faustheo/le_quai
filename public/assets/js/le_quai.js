@@ -1,5 +1,10 @@
 $(document).ready(function () {
     const $bookingHoursSelect = $('.js-booking-hours');
+    // Vérifiez si le formulaire de réservation est présent sur la page
+    if ($('#booking-form').length > 0) {
+        // Le reste de votre code JavaScript
+    }
+
 
     $('.js-booking-date').on('change', function () {
         // Récupérer la date sélectionnée
@@ -45,7 +50,7 @@ $(document).ready(function () {
     // Déclenche manuellement l'événement 'change' pour remplir les options initiales
     $('.js-booking-date').trigger('change');
 
-    $('form').on('submit', function (event) {
+    $('#booking-form').on('submit', function (event) {
         event.preventDefault();
 
         // Récupérer la date sous forme de chaîne de caractères au format 'Y-m-d'

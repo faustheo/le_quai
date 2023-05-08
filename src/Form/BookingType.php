@@ -38,12 +38,12 @@ class BookingType extends AbstractType
         $timeSlots = [];
 
         // Pour le déjeuner
-        for ($time = clone $lunchOpening; $time < $lunchClosing; $time->modify('+30 minutes')) {
+        for ($time = clone $lunchOpening; $time < $lunchClosing; $time->modify('+15 minutes')) {
             $timeSlots[$time->format('H:i')] = $time->format('H:i');
         }
 
         // Pour le dîner
-        for ($time = clone $dinnerOpening; $time < $dinnerClosing; $time->modify('+30 minutes')) {
+        for ($time = clone $dinnerOpening; $time < $dinnerClosing; $time->modify('+15 minutes')) {
             $timeSlots[$time->format('H:i')] = $time->format('H:i');
         }
 
@@ -73,6 +73,7 @@ class BookingType extends AbstractType
                 'label' => 'Choisissez une date',
                 'attr' => [
                     'class' => 'js-booking-date my-custom-class',
+                    'id' => 'booking-form',
                 ],
                 'data' => (new \DateTime())->format('Y-m-d'), // Valeur par défaut
                 'choice_label' => function ($choiceValue, $key, $value) {
