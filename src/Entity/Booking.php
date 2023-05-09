@@ -54,16 +54,16 @@ class Booking
 
         return $this;
     }
-    
+
     public function getHours(): ?string
     {
         return $this->hours;
     }
-    
+
     public function setHours(string $hours): self
     {
         $this->hours = $hours;
-    
+
         return $this;
     }
 
