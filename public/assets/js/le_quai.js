@@ -73,3 +73,65 @@ $(document).ready(function () {
         this.submit();
     });
 });
+
+
+$(document).ready(function () {
+    function submitBookingForm() {
+        // Récupérez le formulaire et les données du formulaire
+        const form = document.getElementById('booking-form');
+        const formData = new FormData(form);
+
+        // Utilisez Fetch API pour soumettre le formulaire en AJAX
+        fetch('/submit-booking', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Invalid form data');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Mettez à jour le nombre de places disponibles
+                document.getElementById('available-seats').innerText = data.available_seats;
+            })
+            .catch(error => {
+                console.error('Error submitting booking form:', error);
+            });
+    }
+
+    function refreshAvailableSeats() {
+        console.log('Refreshing available seats...'); // Ajoutez cette ligne pour voir si la fonction est appelée
+        fetch('/max/guests', { cache: 'no-store' }) // Ajout de l'option 'cache: no-store'
+            .then(response => response.json())
+            .then(data => {
+                // Mettre à jour les places disponibles dans le formulaire
+                document.querySelector('#booking_guests').setAttribute('max', data.available_seats);
+
+                // Mettre à jour l'affichage des places disponibles sur la page
+                document.querySelector('#available-seats').textContent = data.available_seats;
+            });
+    }
+
+    function pollAvailableSeats() {
+
+        refreshAvailableSeats();
+
+
+        setInterval(refreshAvailableSeats, 5000);
+    }
+
+    document.getElementById('booking-form').addEventListener('submit', (event) => {
+        event.preventDefault(); // Empêcher l'envoi du formulaire par défaut
+
+        // Soumettez le formulaire via AJAX
+        submitBookingForm(); // Ajoutez cet appel
+
+        // Mettez à jour le nombre de places disponibles après la soumission du formulaire
+        refreshAvailableSeats();
+    });
+
+    // Démarrez la vérification périodique des places disponibles
+    pollAvailableSeats();
+});

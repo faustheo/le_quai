@@ -13,8 +13,23 @@ class MaxGuests
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: "integer")]
+    private int $availableSeats;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getAvailableSeats(): int
+    {
+        return $this->availableSeats;
+    }
+
+    public function setAvailableSeats(int $availableSeats): self
+    {
+        $this->availableSeats = $availableSeats;
+
+        return $this;
     }
 }

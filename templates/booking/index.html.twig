@@ -17,7 +17,7 @@
     {% endif %}
     
     <h1>Reservation</h1>
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'id': 'booking-form'}}) }}
         {{ form_widget(form.date, {'attr': {'class': 'form-control form-control-sm js-booking-date', 'readonly': true}}) }}
     {{ form_errors(form.date) }}
     
@@ -27,6 +27,10 @@
             {{ form_label(hour) }}
         </div>
     {% endfor %}
-    
+<p>Places disponibles : <span id="available-seats">{{ available_seats }}</span></p>
+
+
+
+
     {{ form_end(form) }}
 {% endblock %}
