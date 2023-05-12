@@ -23,6 +23,29 @@ body {
     object-fit: cover;
 }
 
+.image-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.gallery-item-title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.image-container:hover .gallery-item-title {
+    opacity: 1;
+}
+
 .meal-container {
     margin-bottom: 150px;
 }

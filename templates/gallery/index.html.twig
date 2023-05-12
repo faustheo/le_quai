@@ -4,11 +4,18 @@
     <div class="container my-5">
         <div class="row justify-content-evenly">
             {% for image in lastImages %}
-                <div class=" col-sm-12 col-lg-4"> 
-                    <img src="{{ asset('uploads/' ~ image.getImage()) }}" class="rounded mx-auto d-block img-fluid" alt="{{ image.getTitle() }}" />
+                <div class="col-sm-12 col-lg-4"> 
+                    <div class="image-container">
+                        <img src="{{ asset('uploads/' ~ image.getImage()) }}" class="rounded mx-auto img-fluid" alt="{{ image.getTitle() }}" />
+                        <div class="gallery-item-title">{{ image.getTitle() }}</div>
+                    </div>
                 </div>
             {% endfor %}
         </div>
+        <div class="row">
+            <div class="col d-flex justify-content-center">
+                <a class="btn btn-custom" href="{{ path('app_booking') }}">Reservation</a>
+            </div>
+        </div>
     </div>
 {% endblock %}
-
