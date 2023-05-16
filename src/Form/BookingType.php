@@ -38,12 +38,12 @@ class BookingType extends AbstractType
         $timeSlots = [];
 
         // Pour le déjeuner
-        for ($time = clone $lunchOpening; $time < $lunchClosing; $time->modify('+15 minutes')) {
+        for ($time = clone $lunchOpening; $time <= $lunchClosing->modify('-1 hour'); $time->modify('+15 minutes')) {
             $timeSlots[$time->format('H:i')] = $time->format('H:i');
         }
 
         // Pour le dîner
-        for ($time = clone $dinnerOpening; $time < $dinnerClosing; $time->modify('+15 minutes')) {
+        for ($time = clone $dinnerOpening; $time <= $dinnerClosing->modify('-1 hour'); $time->modify('+15 minutes')) {
             $timeSlots[$time->format('H:i')] = $time->format('H:i');
         }
 

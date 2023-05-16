@@ -17,11 +17,15 @@ $(document).ready(function () {
                 const timeSlots = [];
                 let currentTime = new Date(openingTime);
 
-                while (currentTime < closingTime) {
+                const closingTimeMinusOneHour = new Date(closingTime.getTime() - 60 * 60 * 1000); // 60*60*1000 pour convertir 1 heure en millisecondes
+
+                while (currentTime <= closingTimeMinusOneHour) {
                     const localTime = currentTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
                     timeSlots.push(localTime);
                     currentTime.setMinutes(currentTime.getMinutes() + 15);
                 }
+
+
 
                 return timeSlots;
             }
