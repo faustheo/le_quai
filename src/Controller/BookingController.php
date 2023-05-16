@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Booking;
 use App\Form\BookingType;
 use App\Repository\HoursRepository;
@@ -52,7 +53,15 @@ class BookingController extends AbstractController
     #[Route('/reservation', name: 'app_booking')]
     public function index(MaxGuestsRepository $maxGuestsRepository): Response
     {
+        $user = $this->getUser();
+
         $booking = new Booking();
+
+        if ($user instanceof User) {
+            $booking->setGuests($user->getGuests());
+            $booking->setAllergies($user->getAllergy());
+        }
+
         $form = $this->createForm(BookingType::class, $booking);
 
         $maxGuests = $maxGuestsRepository->findOneByAvailableSeats();
@@ -63,6 +72,7 @@ class BookingController extends AbstractController
             'available_seats' => $availableSeats,
         ]);
     }
+
 
     #[Route("/submit-booking", name: "app_submit_booking", methods: ["POST"])]
     public function submitBooking(Request $request): JsonResponse
