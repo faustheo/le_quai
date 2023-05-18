@@ -81,6 +81,7 @@ class BookingController extends AbstractController
         $form = $this->createForm(BookingType::class, $booking);
 
         $form->handleRequest($request);
+
         $maxGuests = $this->maxGuestsRepository->findOneByAvailableSeats();
         $availableSeats = $maxGuests ? $maxGuests->getAvailableSeats() : 0;
 
@@ -92,6 +93,7 @@ class BookingController extends AbstractController
             }
 
             $bookingDate = $booking->getDate();
+
             $bookingDateTime = new \DateTime($bookingDate->format('Y-m-d') . ' ' . $localHour);
 
             $booking->setDate($bookingDateTime);
@@ -101,11 +103,15 @@ class BookingController extends AbstractController
             $this->entityManager->flush();
 
             $availableSeats -= $booking->getGuests();
+
             $maxGuests->setAvailableSeats($availableSeats);
             $this->entityManager->persist($maxGuests);
             $this->entityManager->flush();
 
-            return new JsonResponse(['available_seats' => $availableSeats]);
+            return new JsonResponse([
+                'message' => 'Votre réservation a été effectuée avec succès.',
+                'available_seats' => $availableSeats
+            ]);
         } else {
             return new JsonResponse(['error' => 'Invalid form data'], Response::HTTP_BAD_REQUEST);
         }

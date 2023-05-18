@@ -26,6 +26,9 @@ class Booking
     #[ORM\Column]
     private array $allergies = [];
 
+    #[ORM\Column(length: 180)]
+    private ?string $email = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Booking
     public function setAllergies(array $allergies): self
     {
         $this->allergies = $allergies;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

@@ -30,6 +30,7 @@ final class Version20230516060124 extends AbstractMigration
         $this->addSql('CREATE TABLE meal (id INT AUTO_INCREMENT NOT NULL, category_id INT NOT NULL, name VARCHAR(255) NOT NULL, slug VARCHAR(255) NOT NULL, illustration VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, price DOUBLE PRECISION NOT NULL, INDEX IDX_9EF68E9C12469DE2 (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE meal ADD CONSTRAINT FK_9EF68E9C12469DE2 FOREIGN KEY (category_id) REFERENCES category (id)');
         $this->addSql('ALTER TABLE booking CHANGE hours hours VARCHAR(8) DEFAULT NULL');
+        $this->addSql('ALTER TABLE booking ADD email VARCHAR(180) NOT NULL');
         $this->addSql('ALTER TABLE hours ADD date DATE DEFAULT NULL');
         $this->addSql('ALTER TABLE `user` CHANGE roles roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', CHANGE allergy allergy LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\'');
         $this->addSql('ALTER TABLE max_guests ADD available_seats INT NOT NULL');
@@ -49,5 +50,7 @@ final class Version20230516060124 extends AbstractMigration
         $this->addSql('DROP TABLE meal');
         $this->addSql('DROP TABLE category');
         $this->addSql('DROP TABLE restaurant_card');
+        $this->addSql('ALTER TABLE booking DROP email');
+        $this->addSql('ALTER TABLE max_guests ADD max_guests INT NOT NULL');
     }
 }

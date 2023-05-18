@@ -17,15 +17,11 @@ $(document).ready(function () {
                 const timeSlots = [];
                 let currentTime = new Date(openingTime);
 
-                const closingTimeMinusOneHour = new Date(closingTime.getTime() - 60 * 60 * 1000); // 60*60*1000 pour convertir 1 heure en millisecondes
-
-                while (currentTime <= closingTimeMinusOneHour) {
+                while (currentTime < closingTime) {
                     const localTime = currentTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
                     timeSlots.push(localTime);
                     currentTime.setMinutes(currentTime.getMinutes() + 15);
                 }
-
-
 
                 return timeSlots;
             }
@@ -99,6 +95,11 @@ $(document).ready(function () {
             .then(data => {
                 // Mettez à jour le nombre de places disponibles
                 document.getElementById('available-seats').innerText = data.available_seats;
+                Swal.fire(
+                    'Réservation réussie!',
+                    data.message,
+                    'success'
+                );
             })
             .catch(error => {
                 console.error('Error submitting booking form:', error);
@@ -129,10 +130,10 @@ $(document).ready(function () {
     document.getElementById('booking-form').addEventListener('submit', (event) => {
         event.preventDefault(); // Empêcher l'envoi du formulaire par défaut
 
-        // Soumettez le formulaire via AJAX
-        submitBookingForm(); // Ajoutez cet appel
+        // Soumettre le formulaire via AJAX
+        submitBookingForm(); // Ajout de cet appel
 
-        // Mettez à jour le nombre de places disponibles après la soumission du formulaire
+        // Mettre à jour le nombre de places disponibles après la soumission du formulaire
         refreshAvailableSeats();
     });
 

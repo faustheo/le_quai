@@ -11,13 +11,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use App\Form\DataTransformer\StringToDateTimeTransformer;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Validator\Constraints as Assert;
 
 
 class BookingType extends AbstractType
@@ -38,12 +39,12 @@ class BookingType extends AbstractType
         $timeSlots = [];
 
         // Pour le déjeuner
-        for ($time = clone $lunchOpening; $time <= $lunchClosing->modify('-1 hour'); $time->modify('+15 minutes')) {
+        for ($time = clone $lunchOpening; $time < $lunchClosing; $time->modify('+15 minutes')) {
             $timeSlots[$time->format('H:i')] = $time->format('H:i');
         }
 
         // Pour le dîner
-        for ($time = clone $dinnerOpening; $time <= $dinnerClosing->modify('-1 hour'); $time->modify('+15 minutes')) {
+        for ($time = clone $dinnerOpening; $time < $dinnerClosing; $time->modify('+15 minutes')) {
             $timeSlots[$time->format('H:i')] = $time->format('H:i');
         }
 
@@ -117,14 +118,28 @@ class BookingType extends AbstractType
                         'message' => 'Veuillez sélectionner une heure de réservation valide.',
                     ]),
                 ],
-                // ...
             ])
             ->add('selectedDate', HiddenType::class, [
                 'data' => $today->format('Y-m-d'),
                 'mapped' => false,
             ]);
 
-
+        $builder
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'constraints' => [
+                    new Assert\Email([
+                        'message' => 'Veuillez entrer un email valide.',
+                    ]),
+                    new Assert\NotBlank([
+                        'message' => 'Veuillez entrer un email.',
+                    ]),
+                    new Assert\Regex([
+                        'pattern' => '/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i',
+                        'message' => 'L\'email entré n\'est pas valide.',
+                    ]),
+                ],
+            ]);
 
         $builder
             ->add('guests', IntegerType::class, [

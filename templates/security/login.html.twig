@@ -16,16 +16,28 @@
 
     <h1 class="h3 mb-3 font-weight-normal">Mon espace membre</h1>
     <label for="inputEmail">Votre email</label>
-    <input 
-        type="email" 
-        value="{{ last_username }}" 
-        name="email" id="inputEmail" 
-        class="form-control" 
-        placeholder="Ex : dimitri.dupond@exemple.com" 
-        autocomplete="email" 
-        required autofocus
-    >
-
+    {% if app.user %}
+        <input 
+            type="email" 
+            value="{{ app.user.email }}" 
+            name="email" id="inputEmail" 
+            class="form-control" 
+            placeholder="Ex : dimitri.dupond@exemple.com" 
+            autocomplete="email" 
+            required autofocus
+        >
+    {% else %}
+        <input 
+            type="email" 
+            value="{{ last_username }}" 
+            name="email" id="inputEmail" 
+            class="form-control" 
+            placeholder="Ex : dimitri.dupond@exemple.com" 
+            autocomplete="email" 
+            required autofocus
+        >
+    {% endif %}
+    
     <label for="inputPassword">Votre mot de passe</label>
     <input 
         type="password" 
