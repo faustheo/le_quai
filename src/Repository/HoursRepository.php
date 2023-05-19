@@ -86,7 +86,7 @@ class HoursRepository extends ServiceEntityRepository
     }
     public function findHoursForDate(\DateTimeInterface $date): array
     {
-        $hours = []; // Ici, vous devez récupérer les heures disponibles pour la date donnée à partir de la base de données
+        $hours = []; // Récupérer les heures disponibles pour la date donnée à partir de la base de données
 
         return $hours;
     }

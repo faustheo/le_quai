@@ -147,10 +147,11 @@
         </div>
 
         <!-- FOOTER-->
-        <footer class="footer-custom">
-                    {% block footer %}
-                    {% endblock %}
-        </footer>
+{% block footer %}
+    {{ render(controller('App\\Controller\\FooterController::footer')) }}
+{% endblock %}
+
+
 
 
     </main>
