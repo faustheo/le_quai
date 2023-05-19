@@ -59,14 +59,12 @@ body {
     font-size: 14px;
 }
 
-/*
-.footer-custom {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+.spacer {
+    padding-bottom: 350px;
+}
+
+.footer {
+    background-color: #BA0F30;
     color: #fff;
     width: 100%;
-    background-color: #BA0F30;
-    padding-top: 25px;
 }
-*/

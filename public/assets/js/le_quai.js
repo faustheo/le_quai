@@ -16,8 +16,9 @@ $(document).ready(function () {
             const generateTimeSlots = function (openingTime, closingTime) {
                 const timeSlots = [];
                 let currentTime = new Date(openingTime);
+                const closingTimeMinusOneHour = new Date(closingTime.getTime() - 60 * 60 * 1000); // -1 heure
 
-                while (currentTime < closingTime) {
+                while (currentTime <= closingTimeMinusOneHour) { // Change "<" to "<="
                     const localTime = currentTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
                     timeSlots.push(localTime);
                     currentTime.setMinutes(currentTime.getMinutes() + 15);
@@ -25,6 +26,8 @@ $(document).ready(function () {
 
                 return timeSlots;
             }
+
+
 
             const selectedDateObj = new Date(selectedDate);
 

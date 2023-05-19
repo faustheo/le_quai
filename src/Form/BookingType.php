@@ -32,24 +32,25 @@ class BookingType extends AbstractType
     private function generateTimeSlots(array $openingAndClosingHours): array
     {
         $lunchOpening = $openingAndClosingHours['LunchOpening'];
-        $lunchClosing = $openingAndClosingHours['LunchClosing'];
+        $lunchClosing = (clone $openingAndClosingHours['LunchClosing'])->modify('-1 hour');
         $dinnerOpening = $openingAndClosingHours['DinnerOpening'];
-        $dinnerClosing = $openingAndClosingHours['DinnerClosing'];
+        $dinnerClosing = (clone $openingAndClosingHours['DinnerClosing'])->modify('-1 hour');
 
         $timeSlots = [];
 
         // Pour le déjeuner
-        for ($time = clone $lunchOpening; $time < $lunchClosing; $time->modify('+15 minutes')) {
+        for ($time = clone $lunchOpening; $time <= $lunchClosing; $time->modify('+15 minutes')) { // Change "<" to "<="
             $timeSlots[$time->format('H:i')] = $time->format('H:i');
         }
 
         // Pour le dîner
-        for ($time = clone $dinnerOpening; $time < $dinnerClosing; $time->modify('+15 minutes')) {
+        for ($time = clone $dinnerOpening; $time <= $dinnerClosing; $time->modify('+15 minutes')) { // Change "<" to "<="
             $timeSlots[$time->format('H:i')] = $time->format('H:i');
         }
 
         return $timeSlots;
     }
+
 
 
     public function buildForm(FormBuilderInterface $builder, array $options)

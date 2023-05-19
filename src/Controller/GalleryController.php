@@ -13,7 +13,7 @@ class GalleryController extends AbstractController
     #[Route('/', name: 'app_gallery')]
     public function index(GalleryRepository $galleryRepository): Response
     {
-        $lastImages = $galleryRepository->findLastImages(3);
+        $lastImages = $galleryRepository->findAll();
         return $this->render('gallery/index.html.twig', [
             'lastImages' => $lastImages,
         ]);
