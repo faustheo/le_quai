@@ -7,14 +7,11 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
-final class Version20230516060124 extends AbstractMigration
+final class Version20230521000000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Manually created migration';
     }
 
     public function up(Schema $schema): void
@@ -35,6 +32,15 @@ final class Version20230516060124 extends AbstractMigration
         $this->addSql('ALTER TABLE `user` CHANGE roles roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', CHANGE allergy allergy LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\'');
         $this->addSql('ALTER TABLE max_guests ADD available_seats INT NOT NULL');
         $this->addSql('CREATE TABLE restaurant_card (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, subtitle VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, price DOUBLE PRECISION NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $password = password_hash('admin', PASSWORD_BCRYPT);
+        $email = 'admin@mail.com';
+        $roles = json_encode(['ROLE_ADMIN']);
+        $firstname = 'admin';
+        $lastname = 'admin';
+        $guests = 0;
+        $allergy = json_encode([]);
+
+        $this->addSql('INSERT INTO `user` (email, roles, password, firstname, lastname, guests, allergy) VALUES (?, ?, ?, ?, ?, ?, ?)', [$email, $roles, $password, $firstname, $lastname, $guests, $allergy]);
     }
 
     public function down(Schema $schema): void

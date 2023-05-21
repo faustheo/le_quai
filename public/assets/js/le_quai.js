@@ -1,8 +1,7 @@
 $(document).ready(function () {
     const $bookingHoursSelect = $('.js-booking-hours');
-    // Vérifiez si le formulaire de réservation est présent sur la page
+    // Vérifie si le formulaire de réservation est présent sur la page
     if ($('#booking-form').length > 0) {
-        // Le reste de votre code JavaScript
     }
 
 
@@ -18,7 +17,7 @@ $(document).ready(function () {
                 let currentTime = new Date(openingTime);
                 const closingTimeMinusOneHour = new Date(closingTime.getTime() - 60 * 60 * 1000); // -1 heure
 
-                while (currentTime <= closingTimeMinusOneHour) { // Change "<" to "<="
+                while (currentTime <= closingTimeMinusOneHour) {
                     const localTime = currentTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
                     timeSlots.push(localTime);
                     currentTime.setMinutes(currentTime.getMinutes() + 15);
@@ -39,7 +38,7 @@ $(document).ready(function () {
             const lunchHours = generateTimeSlots(lunchOpening, lunchClosing);
             const dinnerHours = generateTimeSlots(dinnerOpening, dinnerClosing);
 
-            // Vide les options existantes et ajoutez les nouvelles options de tranches horaires
+            // Vide les options existantes et ajoute les nouvelles options de tranches horaires
             $bookingHoursSelect.empty();
             lunchHours.concat(dinnerHours).forEach(hour => {
                 $bookingHoursSelect.append($('<option>', {
@@ -56,21 +55,17 @@ $(document).ready(function () {
     $('#booking-form').on('submit', function (event) {
         event.preventDefault();
 
-        // Récupérer la date sous forme de chaîne de caractères au format 'Y-m-d'
+        // Récupére la date sous forme de chaîne de caractères au format 'Y-m-d'
         const dateString = new Date($('.js-booking-date').val()).toISOString().slice(0, 10);
 
-        // Remplacer la valeur du champ date par la chaîne de caractères formatée
+        // Remplace la valeur du champ date par la chaîne de caractères formatée
         $('.js-booking-date').val(dateString);
 
-        // Récupérer l'heure locale sélectionnée
+        // Récupére l'heure locale sélectionnée
         const selectedLocalTime = $bookingHoursSelect.val();
 
-        // Remplacer la valeur du champ d'heure par l'heure locale sélectionnée
+        // Remplace la valeur du champ d'heure par l'heure locale sélectionnée
         $bookingHoursSelect.val(selectedLocalTime).attr('name', 'booking[hours]');
-
-        // Affichez les valeurs avant d'empêcher la soumission par défaut
-        console.log('Selected Date:', $('.js-booking-date').val());
-        console.log('Selected Hour:', $bookingHoursSelect.val());
 
         // Soumettre le formulaire
         this.submit();
@@ -80,11 +75,11 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     function submitBookingForm() {
-        // Récupérez le formulaire et les données du formulaire
+        // Récupére le formulaire et les données du formulaire
         const form = document.getElementById('booking-form');
         const formData = new FormData(form);
 
-        // Utilisez Fetch API pour soumettre le formulaire en AJAX
+        // Utilise Fetch API pour soumettre le formulaire en AJAX
         fetch('/submit-booking', {
             method: 'POST',
             body: formData
@@ -96,7 +91,7 @@ $(document).ready(function () {
                 return response.json();
             })
             .then(data => {
-                // Mettez à jour le nombre de places disponibles
+                // Met à jour le nombre de places disponibles
                 document.getElementById('available-seats').innerText = data.available_seats;
                 Swal.fire(
                     'Réservation réussie!',
@@ -110,7 +105,6 @@ $(document).ready(function () {
     }
 
     function refreshAvailableSeats() {
-        console.log('Refreshing available seats...'); // Ajoutez cette ligne pour voir si la fonction est appelée
         fetch('/max/guests', { cache: 'no-store' }) // Ajout de l'option 'cache: no-store'
             .then(response => response.json())
             .then(data => {
