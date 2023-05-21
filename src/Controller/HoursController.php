@@ -26,7 +26,7 @@ class HoursController extends AbstractController
             ];
         }
         $lastDatesAndHours = $hoursRepository->findLastDatesAndHours(7);
-        $times = []; // Ajoutez ici la génération des tranches horaires
+        $times = []; // Ajoute ici la génération des tranches horaires
         return $this->render('hours/index.html.twig', [
             'lastDatesAndHours' => $lastDatesAndHours,
             'times' => $times,

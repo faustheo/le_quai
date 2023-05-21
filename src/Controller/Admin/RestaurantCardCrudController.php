@@ -31,14 +31,4 @@ class RestaurantCardCrudController extends AbstractCrudController
             MoneyField::new('price')->setCurrency('EUR'),
         ];
     }
-    /*
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
-    }
-    */
 }

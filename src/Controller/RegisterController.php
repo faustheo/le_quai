@@ -40,10 +40,8 @@ class RegisterController extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            // Ajoute un message flash
             $this->addFlash('success', 'Inscription réussie !');
 
-            // Redirige l'utilisateur vers la même page pour nettoyer le formulaire
             return $this->redirectToRoute('app_register');
         }
 

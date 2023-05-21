@@ -128,7 +128,7 @@ $(document).ready(function () {
         event.preventDefault(); // Empêcher l'envoi du formulaire par défaut
 
         // Soumettre le formulaire via AJAX
-        submitBookingForm(); // Ajout de cet appel
+        submitBookingForm();
 
         // Mettre à jour le nombre de places disponibles après la soumission du formulaire
         refreshAvailableSeats();

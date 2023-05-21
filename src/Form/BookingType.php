@@ -2,18 +2,14 @@
 
 namespace App\Form;
 
-use DateTime;
 use App\Entity\Booking;
 use App\Repository\HoursRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
-use App\Form\DataTransformer\StringToDateTimeTransformer;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -67,8 +63,6 @@ class BookingType extends AbstractType
             $choices[$choiceLabel] = $dateTime->format('Y-m-d');
         }
 
-        $stringToDateTimeTransformer = new StringToDateTimeTransformer();
-
         $builder
             ->add('date', ChoiceType::class, [
                 'choices' => $choices,
@@ -77,7 +71,7 @@ class BookingType extends AbstractType
                     'class' => 'js-booking-date my-custom-class',
                     'id' => 'booking-form',
                 ],
-                'data' => (new \DateTime())->format('Y-m-d'), // Valeur par défaut
+                'data' => (new \DateTime())->format('Y-m-d'),
                 'choice_label' => function ($choiceValue, $key, $value) {
                     $dateTime = \DateTime::createFromFormat('Y-m-d', $choiceValue);
                     return $dateTime->format('D - d-m-Y');
@@ -147,7 +141,7 @@ class BookingType extends AbstractType
                 'label' => 'Le nombre de convives',
                 'attr' => [
                     'min' => 1,
-                    'max' => $options['max_guests'] // utiliser le maximum de convives autorisés
+                    'max' => $options['max_guests']
                 ],
             ])
             ->add('allergies', ChoiceType::class, [
@@ -182,7 +176,7 @@ class BookingType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Booking::class,
-            'max_guests' => 50 // valeur par défaut, à remplacer par le maximum de convives autorisés défini dans le panel d'administration
+            'max_guests' => 50
         ]);
     }
 }

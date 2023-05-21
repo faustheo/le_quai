@@ -14,7 +14,7 @@ class RestaurantCardController extends AbstractController
     {
         $findAllRestaurantCards = $restaurantCardRepository->findAll();
         return $this->render('restaurant_card/index.html.twig', [
-            'restaurantCards' => $findAllRestaurantCards // Utiliser 'restaurantCards' au lieu de 'findAllRestaurantCard'
+            'restaurantCards' => $findAllRestaurantCards
         ]);
     }
 }

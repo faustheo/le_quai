@@ -46,44 +46,12 @@ class MaxGuestsRepository extends ServiceEntityRepository
     }
     public function getAvailableSeats(): int
     {
-        // Récupérez l'entité MaxGuests avec le nombre de sièges disponibles
         $maxGuests = $this->findOneByAvailableSeats();
 
-        // Si l'entité MaxGuests n'existe pas, retournez 0
         if ($maxGuests === null) {
             return 0;
         }
 
-        // Sinon, retournez le nombre de sièges disponibles
         return $maxGuests->getAvailableSeats();
     }
-
-
-
-
-
-    //    /**
-    //     * @return MaxGuests[] Returns an array of MaxGuests objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('m.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?MaxGuests
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

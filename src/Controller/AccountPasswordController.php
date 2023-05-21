@@ -14,22 +14,22 @@ class AccountPasswordController extends AbstractController
 {
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager) {
+    public function __construct(EntityManagerInterface $entityManager)
+    {
         $this->entityManager = $entityManager;
-
     }
     #[Route('/compte/modifier-mon-mot-de-passe', name: 'app_account_password')]
     public function index(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $notification = null;
 
-        $user = $this->getUser(); //J'appelle l'objet utilisateur je l'injecte dans $user avant de le passé à mon $form
-        $form = $this->createForm(ChangePasswordType::class, $user); // Juste ici
+        $user = $this->getUser();
+        $form = $this->createForm(ChangePasswordType::class, $user);
 
         $form->handleRequest($request);
-        
 
-        if($form->isSubmitted() && $form->isValid()) {
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $old_pwd = $form->get('old_password')->getData();
 
             if ($passwordHasher->isPasswordValid($user, $old_pwd)) {

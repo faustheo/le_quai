@@ -86,7 +86,7 @@ class HoursRepository extends ServiceEntityRepository
     }
     public function findHoursForDate(\DateTimeInterface $date): array
     {
-        $hours = []; // Récupérer les heures disponibles pour la date donnée à partir de la base de données
+        $hours = [];
 
         return $hours;
     }
@@ -111,32 +111,4 @@ class HoursRepository extends ServiceEntityRepository
 
         return $results;
     }
-
-
-
-
-    //    /**
-    //     * @return Hours[] Returns an array of Hours objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('h')
-    //            ->andWhere('h.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('h.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Hours
-    //    {
-    //        return $this->createQueryBuilder('h')
-    //            ->andWhere('h.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

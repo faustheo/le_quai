@@ -33,34 +33,33 @@ class ChangePasswordType extends AbstractType
             ])
             ->add('old_password', PasswordType::class, [
                 'label' => 'Mon mot de passe actuel',
-                'mapped' =>false, //J'indique à symfony de ne pas lié ce champ là à une entité
+                'mapped' => false,
                 'attr' => [
                     'placeholder' => 'Veuillez saisir votre mot de passe actuel'
                 ]
             ])
             ->add('new_password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'mapped' =>false, //J'indique à symfony de ne pas lié ce champ là à une entité
+                'mapped' => false,
                 'invalid_message' => 'Le mot de passe et la confirmation doivent être identique.',
                 'label' => 'Mon nouveau mot de passe',
                 'required' => true,
-                'first_options' => [ 
+                'first_options' => [
                     'label' => 'Mon nouveau mot de passe',
                     'attr' => [
-                        'placeholder'=>'Ex : JâIF@1Mà12H'
+                        'placeholder' => 'Ex : JâIF@1Mà12H'
                     ]
                 ],
-                'second_options' => [ 
-                    'label' => 'Confirmez votre nouveau mot de passe', 
+                'second_options' => [
+                    'label' => 'Confirmez votre nouveau mot de passe',
                     'attr' => [
-                        'placeholder'=>'Ex : JâIF@1Mà12H'
+                        'placeholder' => 'Ex : JâIF@1Mà12H'
                     ]
                 ]
             ])
             ->add('submit', SubmitType::class, [
                 'label' => "Modifier"
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

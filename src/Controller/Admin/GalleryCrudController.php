@@ -25,13 +25,6 @@ class GalleryCrudController extends AbstractCrudController
                 ->setUploadDir('public/uploads')
                 ->setUploadedFileNamePattern('[randomhash].[extension]')
                 ->setRequired(false)
-            // ->setFormTypeOption('constraints', [ // Ajout des contraintes de validation d'image
-            //     new Image([
-            //         'maxSize' => '5M', // Taille maximale de l'image
-            //         'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif'], // Types de fichiers autorisés
-            //         'mimeTypesMessage' => 'Veuillez uploader une image au format JPG, PNG ou GIF', // Message d'erreur en cas de type de fichier invalide
-            //     ])
-            // ]),
         ];
     }
 }

@@ -68,7 +68,6 @@ class Category
     public function removeMeal(Meal $meal): self
     {
         if ($this->meals->removeElement($meal)) {
-            // set the owning side to null (unless already changed)
             if ($meal->getCategory() === $this) {
                 $meal->setCategory(null);
             }

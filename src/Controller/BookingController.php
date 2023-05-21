@@ -12,8 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BookingController extends AbstractController
@@ -27,13 +25,11 @@ class BookingController extends AbstractController
         $this->maxGuestsRepository = $maxGuestsRepository;
     }
 
-    /**
-     * @Route("/get-opening-hours/{date}", name="get_opening_hours", methods={"GET"})
-     */
+    #[Route(path: '/get-opening-hours/{date}', name: 'get_opening_hours', methods: ['GET'])]
     public function getOpeningHoursAction(string $date, HoursRepository $hoursRepository): JsonResponse
     {
         $dateObject = \DateTime::createFromFormat('Y-m-d', $date);
-        $dateImmutable = \DateTimeImmutable::createFromMutable($dateObject); // Convertir en DateTimeImmutable
+        $dateImmutable = \DateTimeImmutable::createFromMutable($dateObject);
         $openingAndClosingHours = $hoursRepository->findOpeningAndClosingHoursForDate($dateImmutable);
 
         if ($openingAndClosingHours === null) {
