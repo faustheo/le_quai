@@ -21,7 +21,7 @@ class RegisterController extends AbstractController
     }
 
     #[Route('/inscription', name: 'app_register')]
-    public function index(Request $request, UserPasswordHasherInterface $passwordHasher): Response 
+    public function index(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
@@ -40,7 +40,11 @@ class RegisterController extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
+            // Ajoute un message flash
+            $this->addFlash('success', 'Inscription réussie !');
 
+            // Redirige l'utilisateur vers la même page pour nettoyer le formulaire
+            return $this->redirectToRoute('app_register');
         }
 
         return $this->render('register/index.html.twig', [
