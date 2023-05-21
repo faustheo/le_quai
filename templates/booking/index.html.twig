@@ -16,21 +16,22 @@
     </div>
     {% endif %}
     
-    <h1>Reservation</h1>
-    {{ form_start(form, {'attr': {'id': 'booking-form'}}) }}
-        {{ form_widget(form.date, {'attr': {'class': 'form-control form-control-sm js-booking-date', 'readonly': true}}) }}
-    {{ form_errors(form.date) }}
-    
-    {% for hour in form.hours %}
-        <div>
-            {{ form_widget(hour) }}
-            {{ form_label(hour) }}
-        </div>
-    {% endfor %}
-<p>Places disponibles : <span id="available-seats">{{ available_seats }}</span></p>
-
-
-
-
-    {{ form_end(form) }}
+    <div class="form-container">
+        <h1>Reservation</h1>
+        
+        {{ form_start(form, {'attr': {'id': 'booking-form'}}) }}
+            {{ form_label(form.date, 'Choisissez une date') }}
+            {{ form_widget(form.date, {'attr': {'class': 'form-control form-control-sm js-booking-date', 'readonly': true}}) }}
+            {{ form_errors(form.date) }}
+        
+            {% for hour in form.hours %}
+                <div>
+                    {{ form_widget(hour) }}
+                    {{ form_label(hour) }}
+                </div>
+            {% endfor %}
+        <p>Places disponibles : <span id="available-seats">{{ available_seats }}</span></p>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
+

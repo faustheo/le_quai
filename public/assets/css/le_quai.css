@@ -63,6 +63,14 @@ body {
     padding-bottom: 350px;
 }
 
+.form-container {
+    width: 80%;
+    margin: 0 auto;
+    border: 10px #C6B79B double;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
 .footer {
     background-color: #BA0F30;
     color: #fff;
