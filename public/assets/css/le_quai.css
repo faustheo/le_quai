@@ -1,5 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300&family=Martel+Sans:wght@200&display=swap');
+
 body {
     position: relative;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Martel Sans', sans-serif;
+}
+
+p {
+    font-family: 'Karla', sans-serif;
+}
+
+a {
+    color: #BA0F30;
+}
+
+a:hover,
+a:active {
+    color: #dfac4c;
+}
+
+.btn {
+    background-color: #C6B79B;
+    /* Changer en fonction de la couleur de fond que vous voulez */
+    color: #FFFFFF;
+    /* Changer en fonction de la couleur de texte que vous voulez */
+}
+
+.btn:hover,
+.btn:active {
+    background-color: #dfac4c;
+    /* Une version plus foncée de la couleur d'arrière-plan */
+    color: #FFFFFF;
 }
 
 .navbar-custom,
@@ -15,6 +54,28 @@ body {
 .navbar-item-custom,
 .navbar-item-custom a {
     color: #fff;
+}
+
+.carousel-item {
+    position: relative;
+}
+
+.carousel-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3);
+    /* Modifiez cette valeur pour changer l'opacité de l'overlay */
+    z-index: 1;
+    /* Ceci doit être inférieur au z-index du texte pour que l'overlay soit sous le texte */
+}
+
+.carousel-caption {
+    z-index: 2;
+    /* Ceci doit être supérieur au z-index de l'overlay pour que le texte soit au-dessus de l'overlay */
 }
 
 .carousel-item img {
