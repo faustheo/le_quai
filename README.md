@@ -32,6 +32,8 @@ Voici les étapes pour installer et exécuter le projet localement :
 
 # Mettre à jour les dépendances : Ouvrez la console (sélectionnez bash si vous utilisez VS Code) et tapez :  `composer update`
 
+# Créer la base de données avec : `php bin/console doctrine:database:create`
+
 # Configurer Apache :
 
 	. Allez au panneau de contrôle de Xampp, cliquez sur le bouton de configuration d'Apache et cherchez PHP (php.ini).
